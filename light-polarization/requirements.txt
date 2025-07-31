@@ -1,0 +1,11 @@
+light-polarization
+├── src
+│   ├── main.py
+│   ├── simulation.py
+│   └── visualization.py
+├── tests
+│   └── test_simulation.py
+├── data
+│   └── output
+├── requirements.txt
+└── README.md
