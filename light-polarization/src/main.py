@@ -26,20 +26,22 @@ def main():
     )
     
     # Visualize each type
-    for light, name in [(circular_light, "Circular"),
-                       (elliptical_light, "Elliptical"),
-                       (linear_light, "Linear")]:
-        print(f"\nVisualizing {name} Polarization:")
-        viz = PolarizationVisualizer(light, t_max=2, fps=30)
-        
-        # Show 3D animation
-        viz.plot_3d_evolution()
-        
-        # Show components
-        viz.plot_components()
-        
-        # Show polarization ellipse
-        viz.plot_polarization_ellipse()
+    # for light, name in [(circular_light, "Circular"),
+    #                    (elliptical_light, "Elliptical"),
+    #                    (linear_light, "Linear")]:
+    #     print(f"\nVisualizing {name} Polarization:")
+
+    light, name = (elliptical_light, "Elliptical")  # Example: use elliptical light
+    viz = PolarizationVisualizer(light, t_max=2, fps=30)
+    
+    # Show 3D animation
+    viz.plot_3d_frame()
+    
+    # Show components
+    # viz.plot_components()
+    
+    # # Show polarization ellipse
+    # viz.plot_polarization_ellipse()
 
 if __name__ == "__main__":
     main()
