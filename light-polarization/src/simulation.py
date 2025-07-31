@@ -55,6 +55,8 @@ class PolarizedLight:
                 return "linear"
             else:
                 return "elliptical"
+            
+
 
 def create_circular_polarization(amplitude=1.0, frequency=1.0):
     """Create circularly polarized light"""
