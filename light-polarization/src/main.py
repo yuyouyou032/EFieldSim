@@ -32,15 +32,19 @@ def main():
     #                    (linear_light, "Linear")]:
     #     print(f"\nVisualizing {name} Polarization:")
 
-    light, name = (elliptical_light, "Elliptical")  # Example: use elliptical light
+    light, name = (linear_light, "Linear")  # Example: use linear light
     viz = PolarizationVisualizer(light, t_max=2, fps=30)
     
     # Show 3D animation
     # viz.plot_3d_frame()
     
     c = Crystal()
-    c.set_liNbO3_refractive_index(1.55)  # Example
+    c.set_liNbO3_refractive_index_1550()  # Example
+    c.set_r_voigt_matrix_LiNbO3()  # Set Voigt matrix for LiNbO3
     print(c.n_matrix)
+    print(light.Ex.A, light.Ey.A)
+    a, b = c.EO_effect(light)
+    print(a, b)
     # Show components
     # viz.plot_components()
     

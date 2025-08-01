@@ -17,6 +17,7 @@ class EMWave:
         """
         self.A = amplitude
         self.omega = frequency
+        self.lambda_ = 2 * np.pi / frequency
         self.phi = phase
         self.direction = direction
 
@@ -75,3 +76,5 @@ def create_linear_polarization(amplitude=1.0, frequency=1.0, angle=0):
     Ex = EMWave(amplitude * np.cos(angle), frequency, 0, 'x')
     Ey = EMWave(amplitude * np.sin(angle), frequency, 0, 'y')
     return PolarizedLight(Ex, Ey)
+
+
