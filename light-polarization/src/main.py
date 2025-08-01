@@ -1,5 +1,6 @@
 from simulation import create_circular_polarization, create_elliptical_polarization, create_linear_polarization
 from visualization import PolarizationVisualizer
+from crystal import Crystal
 import numpy as np
 
 def main():
@@ -35,13 +36,18 @@ def main():
     viz = PolarizationVisualizer(light, t_max=2, fps=30)
     
     # Show 3D animation
-    viz.plot_3d_frame()
+    # viz.plot_3d_frame()
     
+    c = Crystal()
+    c.set_liNbO3_refractive_index(1.55)  # Example
+    print(c.n_matrix)
     # Show components
     # viz.plot_components()
     
     # # Show polarization ellipse
     # viz.plot_polarization_ellipse()
+
+
 
 if __name__ == "__main__":
     main()
