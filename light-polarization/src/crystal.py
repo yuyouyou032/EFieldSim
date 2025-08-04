@@ -61,10 +61,10 @@ class Crystal:
 
         self.r_voigt_matrix = r_voigt      
 
-    def EO_effect(self, light: PolarizedLight, e = np.array([1, 0, 0]), E=1e5):
+    def EO_effect(self, light: PolarizedLight, t = 0, e = np.array([1, 0, 0]), E=1e12):
         """Calculate the electro-optic effect based on the electric field,
         returns a 6*1 vector"""
-        r_voigt = self.r_voigt_matrix
+
 
         # Map Voigt to full tensor indices
         voigt_to_full = {
@@ -76,36 +76,34 @@ class Crystal:
             5: (0, 1)
         }
         Delta_inv_eps = np.zeros((3, 3))
-        for m in range(6):
-            i, j = voigt_to_full[m]
-        
-            Delta_inv_eps[i, j] += r_voigt[m, 2] * E  # E_z = column 2
-            if i != j:
-                Delta_inv_eps[j, i] += r_voigt[m, 2] * E  # symmetric part
-            
-            print(Delta_inv_eps)
-            print()
 
-        Ex = np.array([light.Ex.get_field(0), 0, 0])  # Get E-field at t=0
-        Ey = np.array([0, light.Ey.get_field(0), 0])  # Get E-field at t=0
-
-        delta_inv_n2_x = Ex.T @ Delta_inv_eps @ Ex
-        delta_inv_n2_y = Ey.T @ Delta_inv_eps @ Ey
+        Ex = light.Ex.get_field(t)
+        Ey = light.Ey.get_field(t)
 
         no = self.n_matrix[0]
         ne = self.n_matrix[2]
 
-        print("no, ne:", no, ne)
+        print("Ex, Ey", Ex, Ey, "no, ne", no, ne)
 
-        delta_n_eff_x = -0.5 * no**3 * delta_inv_n2_x
+        delta_ns = self.r_voigt_matrix @ np.array(e.reshape(3, 1))* E
+        print("delta_ns", delta_ns)
+
+        
+        delta_inv_n2_y = delta_ns[1]
+        delta_inv_n2_z = delta_ns[2]
+
+
+        delta_n_eff_z = -0.5 * no**3 * delta_inv_n2_z
         delta_n_eff_y = -0.5 * ne**3 * delta_inv_n2_y
-        print(delta_n_eff_x, delta_n_eff_y)
+        print(delta_n_eff_z, delta_n_eff_y)
 
-        delta_phi_x = (2 * np.pi / light.Ex.lambda_) * delta_n_eff_x * self.thickness
+        
         delta_phi_y = (2 * np.pi / light.Ey.lambda_) * delta_n_eff_y * self.thickness
+        delta_phi_z = (2 * np.pi / light.Ex.lambda_) * delta_n_eff_z * self.thickness
 
 
+        print("delta_phi_y, delta_phi_z", delta_phi_y, delta_phi_z)
         # dummy
-        delta_phi_x = 0.1
-        delta_phi_y = 0.2
-        return delta_phi_x, delta_phi_y
+        # delta_phi_x = 0.1
+        # delta_phi_y = 0.2
+        return delta_phi_y, delta_phi_z
