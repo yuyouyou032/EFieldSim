@@ -25,9 +25,10 @@ class EMWave:
         """Calculate E-field at time t"""
         return self.A * np.cos(self.omega * t + self.phi)
 
-class PolarizedLight:
+class PolarizedLight():
     """Superposition of EM waves to create different polarization states"""
     def __init__(self, Ex_wave, Ey_wave):
+        # EMWave.__init__(self, None, None)  # No direct amplitude/frequency
         """
         Parameters:
         -----------

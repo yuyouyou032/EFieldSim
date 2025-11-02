@@ -38,17 +38,18 @@ def main():
     c.set_r_voigt_matrix_LiNbO3()  # Set Voigt matrix for LiNbO3
 
     
-
+# eleptically polarised light
     light = elliptical_light = create_elliptical_polarization(
     amplitude_x=1.0,
     amplitude_y=1,
     frequency=2*np.pi,
     phase_diff=0
     )
-
+# resultant phase shifted light after EO effect
     a, b = c.EO_effect(light)
     print("Phase shifts:", a, b)
 
+# visualise resultant light
     light = elliptical_light = create_elliptical_polarization(
     amplitude_x=1.0,
     amplitude_y=1,
@@ -71,6 +72,19 @@ def main():
     
     # # Show polarization ellipse
     # viz.plot_polarization_ellipse()
+
+    return {
+        "axis-1":a, 
+        "axis-2":b,
+        "resultant":light,
+        "meta":{
+            "crystal": "LiNbO3",
+            "wavelength": light.get_polarization_type(),
+            "input_amplitudes": (a.A, b.A),
+            "input_phase_diff": np.abs(a[0]-b[0])
+        }
+
+    }
 
 
 
