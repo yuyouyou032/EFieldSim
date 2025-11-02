@@ -41,12 +41,12 @@ def compute_geometry(Params):
     c.set_r_voigt_matrix_LiNbO3()  # Set Voigt matrix for LiNbO3
 
     
-# eleptically polarised light
+# elliptically polarised light
     light = create_elliptical_polarization(
-    amplitude_x=1.0,
-    amplitude_y=1.0,
-    frequency=2*np.pi,
-    phase_diff=0
+    amplitude_x=Params.get("amplitude_x", 1.0),
+    amplitude_y=Params.get("amplitude_y", 1.0),
+    frequency=Params.get("frequency", 2*np.pi),
+    phase_diff=Params.get("phase_diff", 0)
     )
 # resultant phase shifted light after EO effect
     a, b = c.EO_effect(light)
@@ -60,10 +60,10 @@ def compute_geometry(Params):
     phase_diff=np.abs(a[0]-b[0])
     )
 
-    viz = PolarizationVisualizer(light, t_max=2, fps=30)
+    # viz = PolarizationVisualizer(light, t_max=2, fps=30)
     
     # Show 3D animation
-    viz.plot_components()
+    # viz.plot_components()
     
 
     # print("v-matrix", c.get_r_voigt_matrix())
@@ -76,16 +76,19 @@ def compute_geometry(Params):
     # # Show polarization ellipse
     # viz.plot_polarization_ellipse()
 
+    print("DEBUGGING MESSAGES:")
+    print(a, b, light.Ex.get_field(0), light.Ey.get_field(0))
+    print(light.get_polarization_type(), light.Ex.A, light.Ey.A, abs(a[0]-b[0]))
     return {
-        "axis-1":a.get_field(0), 
-        "axis-2":b.get_field(0),
-        "resultant":light.get_field(0),
-        "meta":{
-            "crystal": "LiNbO3",
-            "wavelength": light.get_polarization_type(),
-            "input_amplitudes": (a.A, b.A),
-            "input_phase_diff": np.abs(a[0]-b[0])
-        }
+        # "axis-1":a, 
+        # "axis-2":b,
+        "resultantEx":light.Ex.get_field(0),
+        "resultantEy":light.Ey.get_field(0),
+        # "meta":{
+        #     "crystal": "LiNbO3",
+        #     "wavelength": light.get_polarization_type(),
+        #     "input_amplitudes": (light.Ex.A, light.Ey.A),
+        # }
 
     }
 
