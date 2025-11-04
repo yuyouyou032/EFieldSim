@@ -9,20 +9,23 @@ class EMWave:
         amplitude : float
             Peak amplitude of the wave
         frequency : float
-            Angular frequency (ω) in rad/s
+            Frequency (f) in Hz
+            and angular frequency ω = 2πf
         phase : float
             Phase offset in radians
         direction : str
             Polarization direction ('x' or 'y')
         """
         self.A = amplitude
-        self.omega = frequency
-        self.lambda_ = 2 * np.pi / frequency
+        self.f = frequency
+        self.omega = frequency * 2 * np.pi  # angular frequency
+        self.lambda_ = 3e8 / frequency  # wavelength in meters
         self.phi = phase
         self.direction = direction
 
     def get_field(self, t):
         """Calculate E-field at time t"""
+        # note: t is basically infinite. defined in relation to frequency
         return self.A * np.cos(self.omega * t + self.phi)
 
 class PolarizedLight():

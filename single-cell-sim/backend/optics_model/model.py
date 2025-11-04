@@ -40,23 +40,29 @@ def compute_geometry(Params):
     c.set_liNbO3_refractive_index_1550()  # Example
     c.set_r_voigt_matrix_LiNbO3()  # Set Voigt matrix for LiNbO3
 
-    
+
+    amplitude_x=Params.get("amplitude_x", 1.0) # is that really okay?
+    amplitude_y=Params.get("amplitude_y", 1.0)
+    frequency=Params.get("frequency", 2*np.pi)
+    phase_diff=Params.get("phase_diff", 0)
+
 # elliptically polarised light
     light = create_elliptical_polarization(
-    amplitude_x=Params.get("amplitude_x", 1.0),
-    amplitude_y=Params.get("amplitude_y", 1.0),
-    frequency=Params.get("frequency", 2*np.pi),
-    phase_diff=Params.get("phase_diff", 0)
+    amplitude_x=amplitude_x,
+    amplitude_y=amplitude_y,
+    frequency=frequency,
+    phase_diff=phase_diff
     )
 # resultant phase shifted light after EO effect
     a, b = c.EO_effect(light)
     print("Phase shifts:", a, b)
+# and also: at this stage you only need to compute phase shift once...
 
 # visualise resultant light
-    light = elliptical_light = create_elliptical_polarization(
-    amplitude_x=1.0,
-    amplitude_y=1,
-    frequency=2*np.pi,
+    resultant_light = create_elliptical_polarization(
+    amplitude_x=amplitude_x,
+    amplitude_y=amplitude_y,
+    frequency=frequency,
     phase_diff=np.abs(a[0]-b[0])
     )
 
@@ -76,19 +82,20 @@ def compute_geometry(Params):
     # # Show polarization ellipse
     # viz.plot_polarization_ellipse()
 
-    print("DEBUGGING MESSAGES:")
-    print(a, b, light.Ex.get_field(0), light.Ey.get_field(0))
-    print(light.get_polarization_type(), light.Ex.A, light.Ey.A, abs(a[0]-b[0]))
+    # print("DEBUGGING MESSAGES:")
+    # print(a, b, light.Ex.get_field(0), light.Ey.get_field(0))
+    # print(light.get_polarization_type(), light.Ex.A, light.Ey.A, abs(a[0]-b[0]))
     return {
-        # "axis-1":a, 
-        # "axis-2":b,
-        "resultantEx":light.Ex.get_field(0),
-        "resultantEy":light.Ey.get_field(0),
-        # "meta":{
-        #     "crystal": "LiNbO3",
-        #     "wavelength": light.get_polarization_type(),
-        #     "input_amplitudes": (light.Ex.A, light.Ey.A),
-        # }
+        "delta_phi_1":a[0], 
+        "delta_phi_2":b[0],
+        "resultantEx":[resultant_light.Ex.get_field(t) for t in np.linspace(0, 2*np.pi, num=100)],
+        "resultantEy":[resultant_light.Ey.get_field(t) for t in np.linspace(0, 2*np.pi, num=100)],
+        "meta":{
+            "crystal": "LiNbO3",
+            "frequency": resultant_light.Ex.f,
+            "resultant_polarization": resultant_light.get_polarization_type(),
+            "input_amplitudes": (light.Ex.A, light.Ey.A),
+        }
 
     }
 

@@ -83,10 +83,10 @@ class Crystal:
         no = self.n_matrix[0]
         ne = self.n_matrix[2]
 
-        print("Ex, Ey", Ex, Ey, "no, ne", no, ne)
+        # print("Ex, Ey", Ex, Ey, "no, ne", no, ne)
 
         delta_ns = self.r_voigt_matrix @ np.array(e.reshape(3, 1))* E
-        print("delta_ns", delta_ns)
+        # print("delta_ns", delta_ns)
 
         
         delta_inv_n2_y = delta_ns[1]
@@ -95,14 +95,14 @@ class Crystal:
 
         delta_n_eff_z = -0.5 * no**3 * delta_inv_n2_z
         delta_n_eff_y = -0.5 * ne**3 * delta_inv_n2_y
-        print(delta_n_eff_z, delta_n_eff_y)
+        # print(delta_n_eff_z, delta_n_eff_y)
 
         
         delta_phi_y = (2 * np.pi / light.Ey.lambda_) * delta_n_eff_y * self.thickness
         delta_phi_z = (2 * np.pi / light.Ex.lambda_) * delta_n_eff_z * self.thickness
 
 
-        print("delta_phi_y, delta_phi_z", delta_phi_y, delta_phi_z)
+        # print("delta_phi_y, delta_phi_z", delta_phi_y, delta_phi_z)
         # dummy
         # delta_phi_x = 0.1
         # delta_phi_y = 0.2
