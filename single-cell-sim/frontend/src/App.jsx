@@ -1,29 +1,32 @@
-import { useEffect, useState } from "react";
-import { fetchScene } from "./api/client.js";
-import ControlsPanel from "./components/ControlsPanel.jsx";
-import Scene3D from "./components/Scene3D.jsx";
+import { useState } from "react";
 
 export default function App() {
-  const [rays, setRays] = useState([]);
-
-  useEffect(() => {
-    fetchScene({ focal_length: 10 }).then(d => setRays(d.rays ?? []))
-      .catch(err => console.error("init fetch failed", err));
-  }, []);
-
-  async function onParamsChange(params) {
-    try {
-      const d = await fetchScene(params);
-      setRays(d.rays ?? []);
-    } catch (e) {
-      console.error("update failed", e);
-    }
-  }
+  const [count, setCount] = useState(0);
 
   return (
-    <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
-      <Scene3D raysData={rays} />
-      <ControlsPanel onParamsChange={onParamsChange} />
+    <div style={{ 
+      width: "100vw", 
+      height: "100vh", 
+      background: "#333",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      color: "white",
+      fontSize: "24px"
+    }}>
+      <h1>Test Page</h1>
+      <button 
+        onClick={() => setCount(c => c + 1)}
+        style={{
+          padding: "10px 20px",
+          fontSize: "20px",
+          margin: "20px",
+          cursor: "pointer"
+        }}
+      >
+        Clicked {count} times
+      </button>
     </div>
   );
 }
