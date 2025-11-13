@@ -1,32 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchScene } from "./api/client.js";
+import ControlsPanel from "./components/ControlsPanel.jsx";
 
 export default function App() {
-  const [count, setCount] = useState(0);
+  const [resultantField, setResultantField] = useState({
+    deltaPhis: [0, 0],
+    Ex: [],
+    Ey: [],
+    meta: {}
+  });
+
+  useEffect(() => {
+    fetchScene({ 
+      amplitude_x: 1.0, 
+      amplitude_y: 1.0,
+      frequency: 2 * Math.PI,
+      phase_diff: 0
+    }).then(d => setResultantField({
+      deltaPhis: [d.delta_phi_1, d.delta_phi_2],
+      Ex: d.resultantEx ?? [],
+      Ey: d.resultantEy ?? [],
+      meta: d.meta ?? {}
+    }))
+    .catch(err => console.error("init fetch failed", err));
+  }, []);
+
+  async function onParamsChange(params) {
+    try {
+      const d = await fetchScene(params);
+      setResultantField({
+        deltaPhis: [d.delta_phi_1, d.delta_phi_2],
+        Ex: d.resultantEx ?? [],
+        Ey: d.resultantEy ?? [],
+        meta: d.meta ?? {}
+      });
+    } catch (e) {
+      console.error("update failed", e);
+    }
+  }
 
   return (
-    <div style={{ 
-      width: "100vw", 
-      height: "100vh", 
-      background: "#333",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      color: "white",
-      fontSize: "24px"
-    }}>
-      <h1>Test Page</h1>
-      <button 
-        onClick={() => setCount(c => c + 1)}
-        style={{
-          padding: "10px 20px",
-          fontSize: "20px",
-          margin: "20px",
-          cursor: "pointer"
-        }}
-      >
-        Clicked {count} times
-      </button>
+    <div style={{ position: "relative", width: "100vw", height: "100vh", background: "#333" }}>
+      <ControlsPanel onParamsChange={onParamsChange} />
+      {/* Scene3D disabled for now */}
     </div>
   );
 }
