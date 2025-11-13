@@ -45,6 +45,7 @@ def compute_geometry(Params):
     amplitude_y=Params.get("amplitude_y", 1.0)
     frequency=Params.get("frequency", 2*np.pi)
     phase_diff=Params.get("phase_diff", 0)
+    print("amplitude:", amplitude_x, amplitude_y, "frequency:", frequency, "Phase difference:", phase_diff)
 
 # elliptically polarised light
     light = create_elliptical_polarization(
@@ -55,7 +56,6 @@ def compute_geometry(Params):
     )
 # resultant phase shifted light after EO effect
     a, b = c.EO_effect(light)
-    print("Phase shifts:", a, b)
 # and also: at this stage you only need to compute phase shift once...
 
 # visualise resultant light
@@ -65,6 +65,7 @@ def compute_geometry(Params):
     frequency=frequency,
     phase_diff=np.abs(a[0]-b[0])
     )
+    
 
     # viz = PolarizationVisualizer(light, t_max=2, fps=30)
     
@@ -85,6 +86,7 @@ def compute_geometry(Params):
     # print("DEBUGGING MESSAGES:")
     # print(a, b, light.Ex.get_field(0), light.Ey.get_field(0))
     # print(light.get_polarization_type(), light.Ex.A, light.Ey.A, abs(a[0]-b[0]))
+    
     return {
         "delta_phi_1":a[0], 
         "delta_phi_2":b[0],

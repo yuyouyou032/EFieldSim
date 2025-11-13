@@ -89,19 +89,7 @@ export default function ControlsPanel({ onParamsChange }) {
       background: "rgba(0,0,0,0.5)", color: "#fff", borderRadius: 8
     }}>
 
-      <div style={{ marginBottom: 12 }}>
-        <label style={{ display: "block", marginBottom: 6 }}>phase difference: {phaseDiff.toFixed(2)}</label>
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-        <input
-          type="range" min="-10" max="10" step="0.5"
-          value={phaseDiff} onChange={onPhaseDiffSlide} style={{ width: "100%" }}
-        />
-        <input
-            type="number" step="0.01" value={phaseDiff}
-            onChange={onPhaseDiffInput} style={{ width: 70 }}
-          />
-        </div>
-      </div>
+      
 
       <div style={{ marginBottom: 12 }}>
         <label style={{ display: "block", marginBottom: 6 }}>amplitude X: {amplitude_x.toFixed(2)}</label>
@@ -131,7 +119,7 @@ export default function ControlsPanel({ onParamsChange }) {
         </div>
       </div>
 
-      <div>
+      <div style={{ marginBottom: 12 }}>
         <label style={{ display: "block", marginBottom: 6 }}>frequency: {frequency.toFixed(2)}</label>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <input
@@ -141,6 +129,20 @@ export default function ControlsPanel({ onParamsChange }) {
           <input
             type="number" step="0.01" value={frequency}
             onChange={onFrequencyInput} style={{ width: 90 }}
+          />
+        </div>
+      </div>
+
+      <div >
+        <label style={{ display: "block", marginBottom: 6 }}>phase difference: {phaseDiff.toFixed(2)}</label>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        <input
+          type="range" min="-10" max="10" step="0.5"
+          value={phaseDiff} onChange={onPhaseDiffSlide} style={{ width: "100%" }}
+        />
+        <input
+            type="number" step="0.01" value={phaseDiff}
+            onChange={onPhaseDiffInput} style={{ width: 70 }}
           />
         </div>
       </div>
